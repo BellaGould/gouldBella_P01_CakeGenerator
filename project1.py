@@ -5,8 +5,12 @@ import maya.cmds as cmds
 # first I need to get Maya to generate a cylinder.
 # We'll call this function generate_level
 
-def generate_level(level_width, level_height):
+def generate_level(level_width, level_height, level):
+    level_lift = level*level_height
     lvl_name = cmds.polyCylinder(height=level_height, radius=(level_width/2))[0]
+    cmds.xform(lvl_name, pivots=[0, -level_height/2, 0])
+    cmds.xform(lvl_name, translation=[0, level_height/2, 0])
+    cmds.xform(lvl_name, translation=[0, level_lift, 0])
     return lvl_name
 
 def generate_icing():
@@ -32,8 +36,13 @@ def generate_cake(levels=3, cake_height=3.0, cake_width=1.0,
     level_height = cake_height/levels
     for level in range(0, levels):
         level_width = calculate_width(level, cake_width, level_proportion)
-        lvl_name = generate_level(level_width, level_height)
+        lvl_name = generate_level(level_width, level_height, level)
         cake_list.append(lvl_name)
         if icing == True:
             icing_name = generate_icing(level_width, level_height):
             cake_list.append(icing_name)
+
+def _freeze_transforms(lvl_name):
+    cmds.makeIdentity(lvl_name, apply=True, translate=True, 
+                      rotate=True, scale=True, normal=False, 
+                      preserveNormals=True)
