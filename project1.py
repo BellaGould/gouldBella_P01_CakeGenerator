@@ -11,6 +11,7 @@ def generate_level(level_width, level_height, level):
     cmds.xform(lvl_name, pivots=[0, -level_height/2, 0])
     cmds.xform(lvl_name, translation=[0, level_height/2, 0])
     cmds.xform(lvl_name, translation=[0, level_lift, 0])
+    _freeze_transforms(lvl_name)
     return lvl_name
 
 def generate_icing():
@@ -42,7 +43,7 @@ def generate_cake(levels=3, cake_height=3.0, cake_width=1.0,
             icing_name = generate_icing(level_width, level_height):
             cake_list.append(icing_name)
 
-def _freeze_transforms(lvl_name):
-    cmds.makeIdentity(lvl_name, apply=True, translate=True, 
+def _freeze_transforms(obj_name):
+    cmds.makeIdentity(obj_name, apply=True, translate=True, 
                       rotate=True, scale=True, normal=False, 
                       preserveNormals=True)
