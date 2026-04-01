@@ -13,7 +13,7 @@ class Cake():
     cake_height = 3.0
     cake_width = 1.0
     level_proportion = 0.75
-    cake_color = "white"
+    cake_color = "red"
     icing = True
     
     def generate_level(self, level, level_width, level_height):
@@ -41,8 +41,24 @@ class Cake():
         level_width = (self.level_proportion**level)*self.cake_width
         return level_width
     
-    def color_cake():
-        pass
+    def color_cake(self, grp_name):
+        cmds.select(grp_name, replace=True)
+        shader_name = cmds.shadingNode("standardsurface",
+                                       asShader=True, name="cakeShader",)[0]
+        sg_name = f"{shader_name}SG"
+        cmds.sets(renderable=True, noSurfaceShader=True,
+                  empty=True, name=sg_name)
+        cmds.connectAttr(shader_name.outColor,
+                         sg_name.surfaceShader, force=True)
+        cmds.hyperShade(assign=shader_name)
+
+# testing this in maya (reminder for later in case we lose SE again:)
+#         import maya.cmds as cmds
+# cmds.select("cake_GRP", replace=True)
+# shader_name = cmds.shadingNode("standardsurface", asShader=True, name="cakeShader")
+# sg_name = cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name="cakeShaderSG")[0]
+# cmds.connectAttr("%s.outColor" % shader_name, "%s.surfaceShader" % sg_name, force=True)
+# cmds.hyperShade(assign=shader_name)
 
 # I'll need to call generate_level multiple times.
 # I can call this in another function, generate_cake.
