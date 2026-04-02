@@ -91,13 +91,57 @@ class Cake():
         cmds.makeIdentity(obj_name, apply=True, translate=True,
                           rotate=True, scale=True, normal=False,
                           preserveNormals=True)
-        
+
 
 class CakeWin(QtWidgets.QDialog):
     def __init__(self):
         super(CakeWin, self).__init__(parent=get_maya_main_win())
         self.setWindowTitle("Cake Generator")
         self.resize(500, 200)
+        self._define_widgets()
+        self._layout_ui()
+
+    def _define_widgets(self):
+        self.icing_checkbox = QtWidgets.QCheckBox("Add icing")
+        self.level_slider = QtWidgets.QSlider("Levels")
+        self.level_slider.setMinimum(1)
+        self.level_slider.setMaximum(50)
+
+        self.cake_height_dsb = QtWidgets.QDoubleSpinBox("Cake Height")
+        self.cake_height_dsb.setMinimum(1)
+        self.cake_height_dsb.setMaximum(100)
+
+        self.cake_width_dsb = QtWidgets.QDoubleSpinBox("Cake Width")
+        self.cake_width_dsb.setMinimum(1)
+        self.cake_width_dsb.setMaximum(100)
+
+        self.cake_proportion_dsb = QtWidgets.QDoubleSpinBox("Level Proportion")
+        self.cake_proportion_dsb.setMinimum(0.2)
+        self.cake_proportion_dsb.setMaximum(1)
+
+        self.red_slider = QtWidgets.QSlider("R")
+        self.red_slider.setMinimum(0)
+        self.red_slider.setMaximum(1)
+
+        self.green_slider = QtWidgets.QSlider("G")
+        self.green_slider.setMinimum(0)
+        self.green_slider.setMaximum(1)
+
+        self.blue_slider = QtWidgets.QSlider("B")
+        self.blue_slider.setMinimum(0)
+        self.blue_slider.setMaximum(1)
+
+    def _layout_ui(self):
+        self.main_layout = QtWidgets.QVBoxLayout()
+        self.main_layout.addWidget(self.icing_checkbox)
+        self.main_layout.addWidget(self.level_slider)
+        self.main_layout.addWidget(self.cake_height_dsb)
+        self.main_layout.addWidget(self.cake_width_dsb)
+        self.main_layout.addWidget(self.cake_proportion_dsb)
+        self.main_layout.addWidget(self.red_slider)
+        self.main_layout.addWidget(self.green_slider)
+        self.main_layout.addWidget(self.blue_slider)
+        self.setLayout(self.main_layout)
 
 
 ### notes from class 3/30/26:
