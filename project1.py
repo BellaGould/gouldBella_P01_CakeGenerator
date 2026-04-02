@@ -1,10 +1,18 @@
 import maya.cmds as cmds
-# from PySide6 import QtWidgets, QtCore
+from PySide6 import QtWidgets, QtCore
+import maya.OpenMayaUI as omui
+from shiboken6 import wrapInstance
 # cake generator!
 # parameters: cake levels (integer), cake height (float), cake width (float),
 # cake color (???), icing (boolean), cake level proportion (float)
 # first I need to get Maya to generate a cylinder.
 # We'll call this function generate_level
+
+
+def get_maya_main_win():
+    """Return the Maya main window widget"""
+    main_window = omui.MQtUtil.mainWindow()
+    return wrapInstance(int(main_window), QtWidgets.QWidget)
 
 
 class Cake():
@@ -28,7 +36,7 @@ class Cake():
 
     def generate_icing(self, level_width, level_height, level):
         level_lift = level*level_height
-        icing_name = cmds.polyTorus(radius=level_width, sectionRadius=0.1)[0]
+        icing_name = cmds.polyTorus(radius=level_width, sectionRadius=0.1*(self.level_proportion**level))[0]
         cmds.xform(icing_name, translation=[0,
                    level_lift+level_height, 0])
         return icing_name
@@ -83,6 +91,13 @@ class Cake():
         cmds.makeIdentity(obj_name, apply=True, translate=True,
                           rotate=True, scale=True, normal=False,
                           preserveNormals=True)
+        
+
+class CakeWin(QtWidgets.QDialog):
+    def __init__(self):
+        super(CakeWin, self).__init__(parent=get_maya_main_win())
+        self.setWindowTitle("Cake Generator")
+        self.resize(500, 200)
 
 
 ### notes from class 3/30/26:
