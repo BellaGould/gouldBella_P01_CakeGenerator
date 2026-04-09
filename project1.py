@@ -83,6 +83,7 @@ class Cake():
 class CakeWin(QtWidgets.QDialog):
     def __init__(self):
         super(CakeWin, self).__init__(parent=get_maya_main_win())
+        self.cake = Cake()
         self.setWindowTitle("Cake Generator")
         self.resize(500, 500)
         self._define_widgets()
@@ -188,17 +189,29 @@ class CakeWin(QtWidgets.QDialog):
         self.setLayout(self.main_layout)
 
     def _connect_signals(self):
+        self.cancel_btn.clicked.connect(self.close)
+        self.build_btn.clicked.connect(self.generate_cake)
 
+        self.level_spnbx.valueChanged.connect(self.level_slider.setValue)
+        self.level_slider.valueChanged.connect(self.level_spnbx.setValue)
 
-### notes from class 3/30/26:
-# from PySide6 import QtWidgets, QtCore
-# class CakeWin(QtWidgets.QDialog):
-#     def __init__(self):
-#          super().__init__()
-#          self.setWindowTitle("Cake Generator")
-#          self.resize(500,200)
-#
-#
+        self.red_dsb.valueChanged.connect(self.red_slider.setValue)
+        self.red_slider.valueChanged.connect(self.red_dsb.setValue)
+        self.green_dsb.valueChanged.connect(self.green_slider.setValue)
+        self.green_slider.valueChanged.connect(self.green_dsb.setValue)
+        self.blue_dsb.valueChanged.connect(self.blue_slider.setValue)
+        self.blue_slider.valueChanged.connect(self.blue_dsb.setValue)
+
+    def generate_cake(self):
+        self.cake.levels = self.level_spnbx.value()
+        self.cake.cake_height = self.cake_height_dsb.value()
+        self.cake.cake_width = self.cake_width_dsb.value()
+        self.cake.level_proportion = self.cake_proportion_dsb.value()
+        self.cake.cake_red = self.red_dsb.value()
+        self.cake.cake_green = self.green_dsb.value()
+        self.cake.cake_blue = self.blue_dsb.value()
+        self.cake.icing = self.icing_checkbox.isChecked()
+
 # in maya: create CakeWin object
 # win = project1.CakeWin()
 # win.show###
